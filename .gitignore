@@ -484,5 +484,5 @@ $RECYCLE.BIN/
 *.swp
 
 # SQLite temporary files
-.db-shm
-.db-wal
+*.db-shm
+*.db-wal
