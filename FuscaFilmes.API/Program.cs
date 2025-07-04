@@ -35,6 +35,29 @@ app.MapPost("/director", (Director director) =>
 })
 .WithOpenApi();
 
+app.MapPut("/director/{directorId}", (int directorId, Director directorNew) =>
+{
+    using var context = new Context();
+    var director = context.Directors.Find(directorId);
+    if(director != null)
+    {
+        director.Name = directorNew.Name;
+
+        if(directorNew.Movies.Count > 0)
+        {
+            director.Movies.Clear();
+
+            foreach(var movie in directorNew.Movies)
+            {
+                director.Movies.Add(movie);
+            }
+        };
+    }
+
+    context.SaveChanges();
+})
+.WithOpenApi();
+
 app.MapDelete("/director", (int directorId) =>
 {
     using var context = new Context();
