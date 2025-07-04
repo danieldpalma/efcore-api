@@ -6,10 +6,15 @@ using Microsoft.AspNetCore.Http.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
-using (var context = new Context())
+builder.Services.AddDbContext<Context>(options =>
 {
-    context.Database.EnsureCreated();
-};
+    options.UseSqlite(builder.Configuration["ConnectionStrings:FuscaFilmesDb"]);
+});
+
+//using (var context = new Context())
+//{
+//    context.Database.EnsureCreated();
+//};
 
 builder.Services.AddSwaggerGen();
 
@@ -29,26 +34,23 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/directors", () =>
+app.MapGet("/directors", (Context context) =>
 {
-    using var context = new Context();
     return context.Directors
         .Include(director => director.Movies)
         .ToList();
 })
 .WithOpenApi();
 
-app.MapPost("/director", (Director director) =>
+app.MapPost("/director", (Context context, Director director) =>
 {
-    using var context = new Context();
     context.Directors.Add(director);
     context.SaveChanges();
 })
 .WithOpenApi();
 
-app.MapPut("/director/{directorId}", (int directorId, Director directorNew) =>
+app.MapPut("/director/{directorId}", (Context context, int directorId, Director directorNew) =>
 {
-    using var context = new Context();
     var director = context.Directors.Find(directorId);
     if(director != null)
     {
@@ -69,9 +71,8 @@ app.MapPut("/director/{directorId}", (int directorId, Director directorNew) =>
 })
 .WithOpenApi();
 
-app.MapDelete("/director/{directorId}", (int directorId) =>
+app.MapDelete("/director/{directorId}", (Context context, int directorId) =>
 {
-    using var context = new Context();
     var director = context.Directors.Find(directorId);
     if(director != null)
     {

@@ -3,13 +3,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FuscaFilmes.API.DbContexts;
 
-public class Context : DbContext
+public class Context(DbContextOptions<Context> options) : DbContext(options)
 {
     public DbSet<Movie> Movies { get; set; }
     public DbSet<Director> Directors { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder options)
-    {
-        options.UseSqlite("Data Source=EFCoreDb.db");
-    }
 }
