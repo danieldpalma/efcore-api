@@ -1,5 +1,8 @@
 using FuscaFilmes.API.DbContexts;
 using FuscaFilmes.API.Entities;
+using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Http.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +12,12 @@ using (var context = new Context())
 };
 
 builder.Services.AddSwaggerGen();
+
+builder.Services.Configure<JsonOptions>(options =>
+{
+    options.SerializerOptions.AllowTrailingCommas = true;
+    options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
 
 var app = builder.Build();
 
@@ -23,7 +32,9 @@ app.UseHttpsRedirection();
 app.MapGet("/directors", () =>
 {
     using var context = new Context();
-    return context.Directors.ToList();
+    return context.Directors
+        .Include(director => director.Movies)
+        .ToList();
 })
 .WithOpenApi();
 
