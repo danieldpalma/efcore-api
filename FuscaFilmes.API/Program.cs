@@ -1,4 +1,5 @@
 using FuscaFilmes.API.DbContexts;
+using FuscaFilmes.API.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,9 +20,31 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/", () =>
+app.MapGet("/directors", () =>
 {
-    return "Hello World";
+    using var context = new Context();
+    return context.Directors.ToList();
+})
+.WithOpenApi();
+
+app.MapPost("/director", (Director director) =>
+{
+    using var context = new Context();
+    context.Directors.Add(director);
+    context.SaveChanges();
+})
+.WithOpenApi();
+
+app.MapDelete("/director", (int directorId) =>
+{
+    using var context = new Context();
+    var director = context.Directors.Find(directorId);
+    if(director != null)
+    {
+        context.Remove(director);
+    }
+
+    context.SaveChanges();
 })
 .WithOpenApi();
 
