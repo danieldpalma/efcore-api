@@ -58,7 +58,7 @@ app.MapPut("/director/{directorId}", (int directorId, Director directorNew) =>
 })
 .WithOpenApi();
 
-app.MapDelete("/director", (int directorId) =>
+app.MapDelete("/director/{directorId}", (int directorId) =>
 {
     using var context = new Context();
     var director = context.Directors.Find(directorId);
