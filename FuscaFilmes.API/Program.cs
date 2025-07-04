@@ -1,4 +1,11 @@
+using FuscaFilmes.API.DbContexts;
+
 var builder = WebApplication.CreateBuilder(args);
+
+using (var context = new Context())
+{
+    context.Database.EnsureCreated();
+};
 
 builder.Services.AddSwaggerGen();
 
