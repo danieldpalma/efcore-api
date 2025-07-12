@@ -8,8 +8,5 @@ public class Context : DbContext
     public DbSet<Movie> Movies { get; set; }
     public DbSet<Director> Directors { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseSqlite("Data Source=FuscaFilmes.db");
-    }
+    public Context(DbContextOptions options ) : base(options) { }
 }

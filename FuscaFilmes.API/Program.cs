@@ -6,10 +6,10 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-using (var context = new Context())
+builder.Services.AddDbContext<Context>(options =>
 {
-    context.Database.EnsureCreated();
-};
+    options.UseSqlite(builder.Configuration.GetConnectionString("FuscaFilmesDb"));
+});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -30,18 +30,16 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/directors", () =>
+app.MapGet("/directors", (Context context) =>
     {
-        using var context = new Context();
         return context.Directors
             .Include(director => director.Movies)
             .ToList();
     })
     .WithOpenApi();
 
-app.MapPost("/director", (Director director) =>
+app.MapPost("/director", (Context context, Director director) =>
     {
-        using var context = new Context();
         context.Directors.Add(director);
         context.SaveChanges();
     })
