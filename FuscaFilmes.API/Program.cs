@@ -38,6 +38,15 @@ app.MapGet("/directors", (Context context) =>
     })
     .WithOpenApi();
 
+app.MapGet("/directors/{id:int}", (Context context, int id) =>
+    {
+        return context.Directors
+            .Where(director => director.Id == id)
+            .Include(director => director.Movies)
+            .ToList();
+    })
+    .WithOpenApi();
+
 app.MapPost("/director", (Context context, Director director) =>
     {
         context.Directors.Add(director);
