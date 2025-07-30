@@ -89,6 +89,14 @@ app.MapDelete("/director/{directorId:int}", (Context context, int directorId) =>
     })
     .WithOpenApi();
 
+app.MapGet("/movie", (Context context) =>
+    {
+        return context.Movies
+            .Include(movie => movie.Director)
+            .ToList();
+    })
+    .WithOpenApi();
+
 app.MapGet("/movie/{id:int}", (Context context, int id) =>
     {
       return context.Movies
