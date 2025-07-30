@@ -93,6 +93,7 @@ app.MapGet("/movie", (Context context) =>
     {
         return context.Movies
             .Include(movie => movie.Director)
+            .OrderBy(movie => movie.Title)
             .ToList();
     })
     .WithOpenApi();
