@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using FuscaFilmes.API.DbContexts;
+using FuscaFilmes.API.EndpointHandlers;
 using FuscaFilmes.API.Entities;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
@@ -31,89 +32,38 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/directors", (Context context) =>
-    {
-        return context.Directors
-            .Include(director => director.Movies)
-            .ToList();
-    })
+app.MapGet("/directors", DirectorHandlers.GetDirectors)
     .WithOpenApi();
 
-app.MapGet("/directors/{id:int}", (Context context, int id) =>
-    {
-        return context.Directors
-            .Where(director => director.Id == id)
-            .Include(director => director.Movies)
-            .ToList();
-    })
+app.MapGet("/directors/{id:int}", DirectorHandlers.GetDirectorById)
     .WithOpenApi();
 
-app.MapPost("/director", (Context context, Director director) =>
-    {
-        context.Directors.Add(director);
-        context.SaveChanges();
-    })
+app.MapGet("/directors/{name}", DirectorHandlers.GetDirectorByName)
     .WithOpenApi();
 
-app.MapPut("/director/{directorId:int}", (Context context, int directorId, Director directorNew) =>
-    {
-        var director = context.Directors.Find(directorId);
-        if(director != null)
-        {
-            director.Name = directorNew.Name;
-
-            if(directorNew.Movies.Count > 0)
-            {
-                director.Movies.Clear();
-
-                foreach(var movie in directorNew.Movies)
-                {
-                    director.Movies.Add(movie);
-                }
-            };
-        }
-
-        context.SaveChanges();
-    })
+app.MapPost("/directors", DirectorHandlers.CreateDirector)
     .WithOpenApi();
 
-app.MapDelete("/director/{directorId:int}", (Context context, int directorId) =>
-    {
-        var director = context.Directors.Find(directorId);
-        if(director != null)
-        {
-            context.Remove(director);
-        }
-
-        context.SaveChanges();
-    })
+app.MapPut("/director/{directorId:int}", DirectorHandlers.UpdateDirector)
     .WithOpenApi();
 
-app.MapGet("/movie", (Context context) =>
-    {
-        return context.Movies
-            .Include(movie => movie.Director)
-            .OrderBy(movie => movie.Title)
-            .ToList();
-    })
+app.MapDelete("/director/{directorId:int}", DirectorHandlers.DeleteDirector)
     .WithOpenApi();
 
-app.MapGet("/movie/{id:int}", (Context context, int id) =>
-    {
-      return context.Movies
-          .Where(movie => movie.Id == id)
-          .Include(movie => movie.Director)
-          .ToList();
-    })
+
+app.MapGet("/movie", MovieHandlers.GetMovies)
     .WithOpenApi();
 
-app.MapGet("/movie/byName/{title}", (Context context, string title) =>
-    {
-        return context.Movies
-            .Where(movie => movie.Title.Contains(title))
-            .Include(movie => movie.Director)
-            .ToList();
-    })
+app.MapGet("/movies/{id:int}", MovieHandlers.GetMovieById)
+    .WithOpenApi();
+
+app.MapGet("/movie/byName/{title}", MovieHandlers.GetMovieByTitle)
+    .WithOpenApi();
+
+app.MapPatch("/movies/", MovieHandlers.UpdateMovie)
+    .WithOpenApi();
+
+app.MapDelete("/movies/{id:int}", MovieHandlers.DeleteMovie)
     .WithOpenApi();
 
 app.Run();
