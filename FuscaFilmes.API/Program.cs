@@ -1,7 +1,6 @@
 using System.Text.Json.Serialization;
 using FuscaFilmes.API.DbContexts;
-using FuscaFilmes.API.EndpointHandlers;
-using FuscaFilmes.API.Entities;
+using FuscaFilmes.API.EndpointExtensions;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,38 +31,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/directors", DirectorHandlers.GetDirectors)
-    .WithOpenApi();
-
-app.MapGet("/directors/{id:int}", DirectorHandlers.GetDirectorById)
-    .WithOpenApi();
-
-app.MapGet("/directors/{name}", DirectorHandlers.GetDirectorByName)
-    .WithOpenApi();
-
-app.MapPost("/directors", DirectorHandlers.CreateDirector)
-    .WithOpenApi();
-
-app.MapPut("/director/{directorId:int}", DirectorHandlers.UpdateDirector)
-    .WithOpenApi();
-
-app.MapDelete("/director/{directorId:int}", DirectorHandlers.DeleteDirector)
-    .WithOpenApi();
-
-
-app.MapGet("/movie", MovieHandlers.GetMovies)
-    .WithOpenApi();
-
-app.MapGet("/movies/{id:int}", MovieHandlers.GetMovieById)
-    .WithOpenApi();
-
-app.MapGet("/movie/byName/{title}", MovieHandlers.GetMovieByTitle)
-    .WithOpenApi();
-
-app.MapPatch("/movies/", MovieHandlers.UpdateMovie)
-    .WithOpenApi();
-
-app.MapDelete("/movies/{id:int}", MovieHandlers.DeleteMovie)
-    .WithOpenApi();
+app.DirectorsEnpoints();
+app.MoviesEnpoints();
 
 app.Run();
