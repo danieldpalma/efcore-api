@@ -8,7 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<Context>(options =>
 {
-    options.UseSqlite(builder.Configuration.GetConnectionString("FuscaFilmesDb"));
+    options.UseSqlite(builder.Configuration.GetConnectionString("FuscaFilmesDb"))
+        .LogTo(Console.WriteLine, LogLevel.Information);
 });
 
 builder.Services.AddEndpointsApiExplorer();
