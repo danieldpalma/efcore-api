@@ -1,5 +1,5 @@
-﻿using FuscaFilmes.API.DbContexts;
-using FuscaFilmes.API.Entities;
+﻿using FuscaFilmes.Repo.DbContexts;
+using FuscaFilmes.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace FuscaFilmes.API.EndpointHandlers;
@@ -32,14 +32,6 @@ public static class MovieHandlers
 			.ToList();
 
 		return movie.Count != 0 ? Results.Ok(movie) : Results.NotFound();
-	}
-
-	public static Movie CreateMovie(Context context, Movie movie)
-	{
-		context.Movies.Add(movie);
-		context.SaveChanges();
-
-		return movie;
 	}
 
 	public static IResult UpdateMovie(Context context, MovieUpdate movieNew)

@@ -18,7 +18,7 @@ public static class EndpointDirectors
 		app.MapPost("/directors", DirectorHandlers.CreateDirector)
 			.WithOpenApi();
 
-		app.MapPut("/director/{directorId:int}", DirectorHandlers.UpdateDirector)
+		app.MapPut("/director/", DirectorHandlers.UpdateDirector)
 			.WithOpenApi();
 
 		app.MapDelete("/director/{directorId:int}", DirectorHandlers.DeleteDirector)
