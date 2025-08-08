@@ -9,7 +9,7 @@ public static class DirectorHandlers
 	{
 		var directors = directorRepository.GetDirectors().ToList();
 
-		return directors.Count() == 0 ? Results.NoContent() : Results.Ok(directors);
+		return directors.Count <= 0 ? Results.NoContent() : Results.Ok(directors);
 	}
 
 	public static IResult GetDirectorById(IDirectorRepository directorRepository, int id)
