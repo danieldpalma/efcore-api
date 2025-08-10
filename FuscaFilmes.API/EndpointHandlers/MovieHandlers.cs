@@ -9,7 +9,7 @@ public static class MovieHandlers
 	public static IEnumerable<Movie> GetMovies(Context context)
 	{
 		return context.Movies
-			.Include(movie => movie.Director)
+			.Include(movie => movie.Directors)
 			.OrderBy(movie => movie.Title)
 			.ToList();
 	}
@@ -18,7 +18,7 @@ public static class MovieHandlers
 	{
 		var movie = context.Movies
 			.Where(movie => movie.Id == id)
-			.Include(movie => movie.Director)
+			.Include(movie => movie.Directors)
 			.FirstOrDefault();
 
 		return movie != null ? Results.Ok(movie) : Results.NotFound();
@@ -28,7 +28,7 @@ public static class MovieHandlers
 	{
 		var movie = context.Movies
 			.Where(movie => movie.Title.Contains(title))
-			.Include(movie => movie.Director)
+			.Include(movie => movie.Directors)
 			.ToList();
 
 		return movie.Count != 0 ? Results.Ok(movie) : Results.NotFound();
