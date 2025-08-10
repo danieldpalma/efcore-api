@@ -35,7 +35,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.DirectorsEnpoints();
-app.MoviesEnpoints();
+app.DirectorsEndpoints();
+app.MoviesEndpoints();
 
 app.Run();

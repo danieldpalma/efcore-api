@@ -4,7 +4,7 @@ namespace FuscaFilmes.API.EndpointExtensions;
 
 public static class EndpointDirectors
 {
-	public static void DirectorsEnpoints(this IEndpointRouteBuilder app)
+	public static void DirectorsEndpoints(this IEndpointRouteBuilder app)
 	{
 		app.MapGet("/directors", DirectorHandlers.GetDirectors)
 			.WithOpenApi();

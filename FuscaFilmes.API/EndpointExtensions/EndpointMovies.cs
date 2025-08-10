@@ -4,7 +4,7 @@ namespace FuscaFilmes.API.EndpointExtensions;
 
 public static class EndpointMovies
 {
-	public static void MoviesEnpoints(this IEndpointRouteBuilder app)
+	public static void MoviesEndpoints(this IEndpointRouteBuilder app)
 	{
 		app.MapGet("/movie", MovieHandlers.GetMovies)
 			.WithOpenApi();
