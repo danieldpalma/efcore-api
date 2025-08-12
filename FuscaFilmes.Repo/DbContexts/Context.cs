@@ -8,15 +8,19 @@ public class Context : DbContext
     public DbSet<Movie> Movies { get; set; }
     public DbSet<Director> Directors { get; set; }
 
+    public DbSet<DirectorMovie> DirectorsMovies { get; set; }
+
     public Context(DbContextOptions options ) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // modelBuilder.Entity<Director>()
-        //     .HasMany(e => e.Movies)
-        //     .WithOne(e => e.Director)
-        //     .HasForeignKey(e => e.DirectorId)
-        //     .IsRequired();
+        modelBuilder.Entity<Director>()
+            .HasMany(e => e.Movies)
+            .WithMany(e => e.Directors)
+            .UsingEntity<DirectorMovie>(
+                dm => dm.HasOne<Movie>(e => e.Movie).WithMany(e => e.DirectorsMovies),
+                dm => dm.HasOne<Director>(e => e.Director).WithMany(e => e.DirectorsMovies)
+            );
 
         modelBuilder.Entity<Director>().HasData(
             new Director { Id = 1, Name = "Christopher Nolan" },
@@ -37,6 +41,19 @@ public class Context : DbContext
             new Movie { Id = 8, Title = "Goodfellas", ReleasedYear = 1990 },
             new Movie { Id = 9, Title = "Lady Bird", ReleasedYear = 2017 },
             new Movie { Id = 10, Title = "Barbie", ReleasedYear = 2023 }
+        );
+        
+        modelBuilder.Entity<DirectorMovie>().HasData(
+            new { DirectorId = 1, MovieId = 1 },
+            new { DirectorId = 1, MovieId = 2 },
+            new { DirectorId = 2, MovieId = 3 },
+            new { DirectorId = 2, MovieId = 4 },
+            new { DirectorId = 3, MovieId = 5 },
+            new { DirectorId = 3, MovieId = 6 },
+            new { DirectorId = 4, MovieId = 7 },
+            new { DirectorId = 4, MovieId = 8 },
+            new { DirectorId = 5, MovieId = 9 },
+            new { DirectorId = 5, MovieId = 10 }
         );
     }
 }
