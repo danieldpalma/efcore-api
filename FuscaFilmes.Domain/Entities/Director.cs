@@ -6,4 +6,5 @@ public class Director
     public required string Name { get; set; }
     public ICollection<DirectorMovie> DirectorsMovies { get; set; } = null!;
     public ICollection<Movie> Movies { get; set; } = [];
+    public DirectorDetail? DirectorDetail { get; set; }
 }

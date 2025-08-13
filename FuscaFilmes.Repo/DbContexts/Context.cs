@@ -22,6 +22,16 @@ public class Context : DbContext
                 dm => dm.HasOne<Director>(e => e.Director).WithMany(e => e.DirectorsMovies)
             );
 
+        modelBuilder.Entity<Director>()
+            .HasOne(d => d.DirectorDetail)
+            .WithOne(d => d.Director)
+            .HasForeignKey<DirectorDetail>(dd => dd.DirectorId);
+
+        modelBuilder.Entity<DirectorDetail>().HasData(
+            new DirectorDetail { Id = 1, DirectorId = 1, Bio = "Christopher Nolan's Bio", BirthDate = new DateTime(1970, 7, 30) },
+            new DirectorDetail { Id = 2, DirectorId = 2, Bio = "Steven Spielberg's Bio", BirthDate = new DateTime(1946, 12, 18) }
+        );
+
         modelBuilder.Entity<Director>().HasData(
             new Director { Id = 1, Name = "Christopher Nolan" },
             new Director { Id = 2, Name = "Steven Spielberg" },
