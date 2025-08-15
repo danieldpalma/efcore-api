@@ -14,6 +14,10 @@ public class Context : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Movie>()
+            .Property(m => m.Budget)
+            .HasPrecision(12, 2);
+        
         modelBuilder.Entity<Director>()
             .HasMany(e => e.Movies)
             .WithMany(e => e.Directors)
