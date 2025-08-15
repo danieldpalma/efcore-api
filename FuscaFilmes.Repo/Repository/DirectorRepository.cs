@@ -7,41 +7,41 @@ namespace FuscaFilmes.Repo.Repository;
 
 public class DirectorRepository(Context context) : IDirectorRepository
 {
-	public IEnumerable<Director> GetDirectors()
+	public async Task<IEnumerable<Director>> GetDirectorsAsync()
 	{
-		return context.Directors
+		return await context.Directors
 			.Include(director => director.Movies)
 			.OrderBy(director => director.Name)
-			.ToList();
+			.ToListAsync();
 	}
 
-	public Director GetDirectorById(int id)
+	public async Task<Director> GetDirectorByIdAsync(int id)
 	{
-		var director = context.Directors
+		var director = await context.Directors
 			.Where(director => director.Id == id)
 			.Include(director => director.Movies)
-			.FirstOrDefault() ?? new Director {Id = 0, Name = "Director not found."};
+			.FirstOrDefaultAsync() ?? new Director {Id = 0, Name = "Director not found."};
 		
 		return director;
 	}
 
-	public Director GetDirectorByName(string name)
+	public async Task<Director> GetDirectorByNameAsync(string name)
 	{
-		var director = context.Directors
+		var director = await context.Directors
 			.Include(director => director.Movies)
-			.FirstOrDefault(director => director.Name.Contains(name)) ?? new Director {Id = 0, Name = "Director not found."};
+			.FirstOrDefaultAsync(director => director.Name.Contains(name)) ?? new Director {Id = 0, Name = "Director not found."};
 		
 		return director;
 	}
 
-	public void Add(Director director)
+	public async Task AddAsync(Director director)
 	{
-		context.Directors.Add(director);
+		await context.Directors.AddAsync(director);
 	}
 
-	public void Update(Director directorNew)
+	public async Task UpdateAsync(Director directorNew)
 	{
-		var director = context.Directors.Find(directorNew.Id);
+		var director = await context.Directors.FindAsync(directorNew.Id);
 		if(director != null)
 		{
 			director.Name = directorNew.Name;
@@ -58,9 +58,9 @@ public class DirectorRepository(Context context) : IDirectorRepository
 		}
 	}
 
-	public void Delete(int directorId)
+	public async Task DeleteAsync(int directorId)
 	{
-		var director = context.Directors.Find(directorId);
+		var director = await context.Directors.FindAsync(directorId);
 
 		if(director != null)
 		{
@@ -68,8 +68,8 @@ public class DirectorRepository(Context context) : IDirectorRepository
 		}
 	}
 
-	public bool SaveChanges()
+	public async Task<bool> SaveChangesAsync()
 	{
-		return context.SaveChanges() > 0;
+		return (await context.SaveChangesAsync()) > 0;
 	}
 }

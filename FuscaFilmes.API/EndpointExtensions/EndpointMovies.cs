@@ -6,19 +6,19 @@ public static class EndpointMovies
 {
 	public static void MoviesEndpoints(this IEndpointRouteBuilder app)
 	{
-		app.MapGet("/movie", MovieHandlers.GetMovies)
+		app.MapGet("/movie", MovieHandlers.GetMoviesAsync)
 			.WithOpenApi();
 
-		app.MapGet("/movies/{id:int}", MovieHandlers.GetMovieById)
+		app.MapGet("/movies/{id:int}", MovieHandlers.GetMovieByIdAsync)
 			.WithOpenApi();
 
-		app.MapGet("/movie/byName/{title}", MovieHandlers.GetMovieByTitle)
+		app.MapGet("/movie/byName/{title}", MovieHandlers.GetMovieByTitleAsync)
 			.WithOpenApi();
 
-		app.MapPatch("/movies/", MovieHandlers.UpdateMovie)
+		app.MapPatch("/movies/", MovieHandlers.UpdateMovieAsync)
 			.WithOpenApi();
 
-		app.MapDelete("/movies/{id:int}", MovieHandlers.DeleteMovie)
+		app.MapDelete("/movies/{id:int}", MovieHandlers.DeleteMovieAsync)
 			.WithOpenApi();
 	}
 }

@@ -6,22 +6,22 @@ public static class EndpointDirectors
 {
 	public static void DirectorsEndpoints(this IEndpointRouteBuilder app)
 	{
-		app.MapGet("/directors", DirectorHandlers.GetDirectors)
+		app.MapGet("/directors", DirectorHandlers.GetDirectorsAsync)
 			.WithOpenApi();
 
-		app.MapGet("/directors/{id:int}", DirectorHandlers.GetDirectorById)
+		app.MapGet("/directors/{id:int}", DirectorHandlers.GetDirectorByIdAsync)
 			.WithOpenApi();
 
-		app.MapGet("/directors/{name}", DirectorHandlers.GetDirectorByName)
+		app.MapGet("/directors/{name}", DirectorHandlers.GetDirectorByNameAsync)
 			.WithOpenApi();
 
-		app.MapPost("/directors", DirectorHandlers.CreateDirector)
+		app.MapPost("/directors", DirectorHandlers.CreateDirectorAsync)
 			.WithOpenApi();
 
-		app.MapPut("/director/", DirectorHandlers.UpdateDirector)
+		app.MapPut("/director/", DirectorHandlers.UpdateDirectorAsync)
 			.WithOpenApi();
 
-		app.MapDelete("/director/{directorId:int}", DirectorHandlers.DeleteDirector)
+		app.MapDelete("/director/{directorId:int}", DirectorHandlers.DeleteDirectorAsync)
 			.WithOpenApi();
 
 	}

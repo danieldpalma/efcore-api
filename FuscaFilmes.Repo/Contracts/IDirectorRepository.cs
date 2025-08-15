@@ -4,12 +4,11 @@ namespace FuscaFilmes.Repo.Contracts;
 
 public interface IDirectorRepository
 {
-	IEnumerable<Director> GetDirectors();
-	Director GetDirectorById(int id);
-	Director GetDirectorByName(string name);
-	void Add(Director director);
-	void Update(Director director);
-	void Delete(int directorId);
-	
-	bool SaveChanges();
+	Task<IEnumerable<Director>> GetDirectorsAsync();
+	Task<Director> GetDirectorByIdAsync(int id);
+	Task<Director> GetDirectorByNameAsync(string name);
+	Task AddAsync(Director director);
+	Task UpdateAsync(Director director);
+	Task DeleteAsync(int directorId);
+	Task<bool> SaveChangesAsync();
 }

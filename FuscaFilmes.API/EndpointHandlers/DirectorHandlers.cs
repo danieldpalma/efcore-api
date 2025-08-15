@@ -5,47 +5,47 @@ namespace FuscaFilmes.API.EndpointHandlers;
 
 public static class DirectorHandlers
 {
-	public static IResult GetDirectors(IDirectorRepository directorRepository)
+	public static async Task<IResult> GetDirectorsAsync(IDirectorRepository directorRepository)
 	{
-		var directors = directorRepository.GetDirectors().ToList();
+		var directors = (await directorRepository.GetDirectorsAsync()).ToList();
 
-		return directors.Count <= 0 ? Results.NoContent() : Results.Ok(directors);
+		return directors.Count == 0 ? Results.NoContent() : Results.Ok(directors);
 	}
 
-	public static IResult GetDirectorById(IDirectorRepository directorRepository, int id)
+	public static async Task<IResult> GetDirectorByIdAsync(IDirectorRepository directorRepository, int id)
 	{
-		var director = directorRepository.GetDirectorById(id);
+		var director = await directorRepository.GetDirectorByIdAsync(id);
 
 		return director.Id == 0 ? Results.NotFound("Director not found.") : Results.Ok(director);
 	} 
 	
-	public static IResult GetDirectorByName(string name, IDirectorRepository directorRepository)
+	public static async Task<IResult> GetDirectorByNameAsync(string name, IDirectorRepository directorRepository)
 	{
-		var director = directorRepository.GetDirectorByName(name);
+		var director = await directorRepository.GetDirectorByNameAsync(name);
 
 		return director.Id == 0 ? Results.NotFound("Director not found.") : Results.Ok(director);
 	} 
 	
-	public static IResult CreateDirector(IDirectorRepository directorRepository, Director director)
+	public static async Task<IResult> CreateDirectorAsync(IDirectorRepository directorRepository, Director director)
 	{
-		directorRepository.Add(director);
-		directorRepository.SaveChanges();
+		await directorRepository.AddAsync(director);
+		await directorRepository.SaveChangesAsync();
 		
 		return Results.Created("Director created.", director);
 	}
 
-	public static IResult UpdateDirector(IDirectorRepository directorRepository, Director directorNew)
+	public static async Task<IResult> UpdateDirectorAsync(IDirectorRepository directorRepository, Director directorNew)
 	{
-		directorRepository.Update(directorNew);
-		directorRepository.SaveChanges();
+		await directorRepository.UpdateAsync(directorNew);
+		await directorRepository.SaveChangesAsync();
 		
 		return Results.Ok("Director updated.");
 	}
 
-	public static IResult DeleteDirector(IDirectorRepository directorRepository, int directorId)
+	public static async Task<IResult> DeleteDirectorAsync(IDirectorRepository directorRepository, int directorId)
 	{
-		directorRepository.Delete(directorId);
-		directorRepository.SaveChanges();
+		await directorRepository.DeleteAsync(directorId);
+		await directorRepository.SaveChangesAsync();
 
 		return Results.Ok("Director deleted.");
 	}

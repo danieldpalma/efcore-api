@@ -6,37 +6,37 @@ namespace FuscaFilmes.API.EndpointHandlers;
 
 public static class MovieHandlers
 {
-	public static IEnumerable<Movie> GetMovies(Context context)
+	public static async Task<List<Movie>> GetMoviesAsync(Context context)
 	{
-		return context.Movies
+		return await context.Movies
 			.Include(movie => movie.Directors)
 			.OrderBy(movie => movie.Title)
-			.ToList();
+			.ToListAsync();
 	}
 
-	public static IResult GetMovieById(Context context, int id)
+	public static async Task<IResult> GetMovieByIdAsync(Context context, int id)
 	{
-		var movie = context.Movies
+		var movie = await context.Movies
 			.Where(movie => movie.Id == id)
 			.Include(movie => movie.Directors)
-			.FirstOrDefault();
+			.FirstOrDefaultAsync();
 
 		return movie != null ? Results.Ok(movie) : Results.NotFound();
 	}
 
-	public static IResult GetMovieByTitle(Context context, string title)
+	public static async Task<IResult> GetMovieByTitleAsync(Context context, string title)
 	{
-		var movie = context.Movies
-			.Where(movie => movie.Title.Contains(title))
+		var movie = await context.Movies
 			.Include(movie => movie.Directors)
-			.ToList();
+			.Where(movie => movie.Title.Contains(title))
+			.ToListAsync();
 
 		return movie.Count != 0 ? Results.Ok(movie) : Results.NotFound();
 	}
 
-	public static IResult UpdateMovie(Context context, MovieUpdate movieNew)
+	public static async Task<IResult> UpdateMovieAsync(Context context, MovieUpdate movieNew)
 	{
-		var movie = context.Movies.Find(movieNew.Id);
+		var movie = await context.Movies.FindAsync(movieNew.Id);
 		
 		if(movie == null)
 		{
@@ -47,14 +47,14 @@ public static class MovieHandlers
 		movie.ReleasedYear = movieNew.ReleasedYear;
 		
 		context.Movies.Update(movie);
-		context.SaveChanges();
+		await context.SaveChangesAsync();
 		
 		return Results.Ok("Movie updated.");
 	}
 
-	public static IResult DeleteMovie(Context context, int id)
+	public static async Task<IResult> DeleteMovieAsync(Context context, int id)
 	{
-		var movie = context.Movies.Find(id);
+		var movie = await context.Movies.FindAsync(id);
 
 		if(movie == null)
 		{
@@ -62,7 +62,7 @@ public static class MovieHandlers
 		}
 		
 		context.Movies.Remove(movie);
-		context.SaveChanges();
+		await context.SaveChangesAsync();
 		
 		return Results.Ok("Movie deleted.");
 	}
